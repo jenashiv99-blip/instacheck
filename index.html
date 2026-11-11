@@ -58,7 +58,7 @@
       result.style.display = 'block';
       result.innerHTML = 'Profile link: <a href="' + url + '" target="_blank" rel="noopener noreferrer">@' +
         username.replace(/[&<>"']/g, '') + '</a><br><span style="color:#a7abc0;font-size:13px">Instagram will show only the information available under that account’s privacy settings.</span>';
-      window.open(url, '_blank', 'noopener,noreferrer');
+     window.location.href = url;
     });
   </script>
 </body>
