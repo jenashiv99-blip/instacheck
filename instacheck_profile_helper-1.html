@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10111b">
+  <title>InstaCheck — Profile Helper</title>
+  <style>
+    :root { color-scheme: dark; --bg:#10111b; --panel:#1a1c2b; --muted:#a7abc0; --text:#f7f7fb; --accent:#c084fc; --accent2:#fb7185; }
+    * { box-sizing:border-box }
+    body { margin:0; min-height:100vh; display:grid; place-items:center; padding:24px; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; color:var(--text); background:radial-gradient(circle at 15% 10%,#30204b 0,transparent 35%),radial-gradient(circle at 90% 90%,#3b1d36 0,transparent 32%),var(--bg); }
+    main { width:min(100%,520px); background:rgba(26,28,43,.94); border:1px solid #34364b; border-radius:24px; padding:clamp(22px,5vw,36px); box-shadow:0 24px 80px #0008; }
+    .mark { width:48px;height:48px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));font-size:24px;margin-bottom:18px }
+    h1 { margin:0 0 8px;font-size:clamp(27px,6vw,36px);letter-spacing:-1px }
+    .sub { color:var(--muted);line-height:1.55;margin:0 0 26px }
+    label { display:block;font-weight:650;margin-bottom:9px }
+    .field { display:flex;gap:9px;align-items:center;background:#111321;border:1px solid #41445d;border-radius:13px;padding:0 14px }
+    .at { color:var(--muted);font-size:18px }
+    input { min-width:0;flex:1;background:transparent;border:0;outline:0;color:var(--text);padding:15px 0;font-size:16px }
+    button { width:100%;margin-top:14px;border:0;border-radius:13px;padding:15px 18px;font-size:15px;font-weight:750;color:#171321;background:linear-gradient(100deg,#d8b4fe,#fda4af);cursor:pointer }
+    button:hover { filter:brightness(1.06) }
+    .result { display:none;margin-top:18px;padding:16px;border-radius:14px;background:#111321;border:1px solid #41445d;line-height:1.5 }
+    .result a { color:#d8b4fe;overflow-wrap:anywhere }
+    .note { margin-top:22px;padding:14px;border-left:3px solid #fbbf24;background:#292516;border-radius:8px;color:#e9dfbd;font-size:13px;line-height:1.55 }
+    .foot { margin-top:20px;color:#858aa3;font-size:12px;text-align:center }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="mark" aria-hidden="true">◎</div>
+    <h1>InstaCheck</h1>
+    <p class="sub">A simple helper to open an Instagram profile and review information Instagram makes visible to you.</p>
+    <form id="profileForm">
+      <label for="username">Instagram username</label>
+      <div class="field">
+        <span class="at">@</span>
+        <input id="username" name="username" placeholder="enter_username" autocomplete="off" maxlength="30" required>
+      </div>
+      <button type="submit">Open Instagram profile ↗</button>
+    </form>
+    <section class="result" id="result" aria-live="polite"></section>
+    <div class="note"><strong>Privacy note:</strong> This tool does not bypass private-account settings or reveal hidden followers/following lists. It does not ask for Instagram passwords, OTPs, or login cookies. Instagram controls what profile information is visible.</div>
+    <div class="foot">Independent profile helper · Not affiliated with Instagram or Meta</div>
+  </main>
+  <script>
+    const form = document.getElementById('profileForm');
+    const input = document.getElementById('username');
+    const result = document.getElementById('result');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const username = input.value.trim().replace(/^@/, '');
+      if (!/^[A-Za-z0-9._]{1,30}$/.test(username)) {
+        result.style.display = 'block';
+        result.textContent = 'Please enter a valid Instagram username (letters, numbers, periods, or underscores; up to 30 characters).';
+        return;
+      }
+      const url = 'https://www.instagram.com/' + encodeURIComponent(username) + '/';
+      result.style.display = 'block';
+      result.innerHTML = 'Profile link: <a href="' + url + '" target="_blank" rel="noopener noreferrer">@' +
+        username.replace(/[&<>"']/g, '') + '</a><br><span style="color:#a7abc0;font-size:13px">Instagram will show only the information available under that account’s privacy settings.</span>';
+      window.open(url, '_blank', 'noopener,noreferrer');
+    });
+  </script>
+</body>
+</html>
